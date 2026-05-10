@@ -199,15 +199,15 @@ function AdminOrderPage() {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm">
+      <div className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-xs font-bold uppercase tracking-widest text-amber-600">Quản lý đơn hàng</p>
-            <h1 className="mt-1 text-2xl font-black text-zinc-900">Danh sách đơn hàng</h1>
+            <h1 className="mt-1 text-xl font-black text-zinc-900 sm:text-2xl">Danh sách đơn hàng</h1>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
             {isConnected && notificationCount > 0 && (
-              <div className="inline-flex items-center gap-2 rounded-lg bg-green-100 px-3 py-2 text-sm">
+              <div className="inline-flex items-center justify-center gap-2 rounded-lg bg-green-100 px-3 py-2 text-sm sm:justify-start">
                 <span className="inline-block h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
                 <p className="text-green-700 font-semibold">{notificationCount} đơn mới</p>
               </div>
@@ -224,18 +224,18 @@ function AdminOrderPage() {
       </div>
 
       <div className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm">
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
           <input
             type="text"
             placeholder="Tìm theo mã đơn, tên, email, số điện thoại..."
             value={filters.search}
             onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value }))}
-            className="flex-1 min-w-[250px] rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none"
+            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none sm:min-w-[250px] sm:flex-1"
           />
           <select
             value={filters.status}
             onChange={(e) => setFilters((prev) => ({ ...prev, status: e.target.value }))}
-            className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none"
+            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none sm:w-auto"
           >
             <option value="">Tất cả trạng thái</option>
             {Object.entries(ORDER_STATUS).map(([key, { label }]) => (
@@ -256,14 +256,14 @@ function AdminOrderPage() {
 
       <div className="rounded-xl border border-zinc-200 bg-white shadow-sm">
         {isLoading ? (
-          <div className="p-8 text-center text-zinc-500">Đang tải đơn hàng...</div>
+          <div className="p-6 text-center text-zinc-500 sm:p-8">Đang tải đơn hàng...</div>
         ) : filteredOrders.length === 0 ? (
-          <div className="p-8 text-center text-zinc-500">
+          <div className="p-6 text-center text-zinc-500 sm:p-8">
             {orders.length === 0 ? 'Chưa có đơn hàng nào.' : 'Không tìm thấy đơn hàng phù hợp.'}
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full min-w-[900px]">
               <thead className="bg-zinc-50">
                 <tr>
                   <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-600">
@@ -328,10 +328,10 @@ function AdminOrderPage() {
       </div>
 
       {detailModalOpen && selectedOrder && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-xl font-black text-zinc-900">Chi tiết đơn hàng</h2>
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-3 sm:items-center sm:p-4">
+          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-5 shadow-2xl sm:p-6">
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <h2 className="text-lg font-black text-zinc-900 sm:text-xl">Chi tiết đơn hàng</h2>
               <button
                 onClick={() => setDetailModalOpen(false)}
                 className="rounded-lg p-2 text-zinc-500 transition hover:bg-zinc-100"
@@ -381,8 +381,8 @@ function AdminOrderPage() {
               {selectedOrder.items && selectedOrder.items.length > 0 && (
                 <div>
                   <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-600">Sản phẩm</p>
-                  <div className="rounded-xl border border-zinc-200">
-                    <table className="w-full">
+                  <div className="overflow-x-auto rounded-xl border border-zinc-200">
+                    <table className="min-w-[560px] w-full">
                       <thead className="bg-zinc-50">
                         <tr>
                           <th className="px-3 py-2 text-left text-xs font-semibold text-zinc-600">Sản phẩm</th>
@@ -423,13 +423,13 @@ function AdminOrderPage() {
                 selectedOrder.status?.toLowerCase() !== 'cancelled' && (
                 <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
                   <p className="mb-3 text-sm font-semibold text-amber-900">Thao tác</p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
                     {getNextStatusOptions(selectedOrder.status).map((status) => (
                       <button
                         key={status}
                         onClick={() => handleUpdateStatus(selectedOrder.id, status)}
                         disabled={isUpdating}
-                        className="rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-amber-700 disabled:opacity-50"
+                        className="rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-amber-700 disabled:opacity-50 sm:w-auto"
                       >
                         {status === 'shipping' ? 'Đang giao' : getStatusDisplay(status).label}
                       </button>
@@ -438,7 +438,7 @@ function AdminOrderPage() {
                       <button
                         onClick={() => handleCancelOrder(selectedOrder.id)}
                         disabled={isUpdating}
-                        className="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700 disabled:opacity-50"
+                        className="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700 disabled:opacity-50 sm:w-auto"
                       >
                         Hủy đơn hàng
                       </button>

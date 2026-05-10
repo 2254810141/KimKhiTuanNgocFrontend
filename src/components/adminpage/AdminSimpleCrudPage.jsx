@@ -121,17 +121,17 @@ function AdminSimpleCrudPage({
 
   return (
     <section className="space-y-5">
-      <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
+      <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-red-600">{title}</p>
-            <h2 className="mt-2 text-2xl font-black text-zinc-900">{description}</h2>
+            <h2 className="mt-2 text-xl font-black text-zinc-900 sm:text-2xl">{description}</h2>
             <p className="mt-2 text-sm text-zinc-500">{emptyLabel}</p>
           </div>
           <button
             type="button"
             onClick={openCreateModal}
-            className="rounded-xl bg-red-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-red-700"
+            className="w-full rounded-xl bg-red-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-red-700 sm:w-auto"
           >
             + Thêm {entityLabel}
           </button>
@@ -139,13 +139,14 @@ function AdminSimpleCrudPage({
       </div>
 
       {isLoading ? (
-        <div className="rounded-2xl border border-dashed border-zinc-300 bg-white p-8 text-center text-zinc-500 shadow-sm">
+        <div className="rounded-2xl border border-dashed border-zinc-300 bg-white p-6 text-center text-zinc-500 shadow-sm sm:p-8">
           Đang tải {entityLabel}...
         </div>
       ) : error ? (
         <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">{error}</div>
       ) : (
         <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
+          <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-zinc-200 text-left text-sm">
             <thead className="bg-zinc-50 text-xs uppercase tracking-widest text-zinc-500">
               <tr>
@@ -199,18 +200,19 @@ function AdminSimpleCrudPage({
               )}
             </tbody>
           </table>
+          </div>
         </div>
       )}
 
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-6">
-          <div className="w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 px-3 py-3 sm:items-center sm:px-4 sm:py-6">
+          <div className="w-full max-w-lg rounded-3xl bg-white p-5 shadow-2xl sm:p-6">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-red-600">
                   {selectedItem ? `Sửa ${entityLabel}` : `Thêm ${entityLabel}`}
                 </p>
-                <h3 className="mt-1 text-2xl font-black text-zinc-900">
+                <h3 className="mt-1 text-xl font-black text-zinc-900 sm:text-2xl">
                   {selectedItem ? `Cập nhật ${entityLabel}` : `Tạo mới ${entityLabel}`}
                 </h3>
               </div>
@@ -233,18 +235,18 @@ function AdminSimpleCrudPage({
                 {errors.name && <p className="mt-1 text-xs text-red-600">{errors.name.message}</p>}
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-2">
+              <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:items-center sm:justify-end">
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="rounded-xl border border-zinc-300 px-4 py-3 text-sm font-bold text-zinc-700 transition hover:bg-zinc-100"
+                  className="rounded-xl border border-zinc-300 px-4 py-3 text-sm font-bold text-zinc-700 transition hover:bg-zinc-100 sm:w-auto"
                 >
                   Hủy
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="rounded-xl bg-red-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-red-700 disabled:opacity-60"
+                  className="rounded-xl bg-red-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-red-700 disabled:opacity-60 sm:w-auto"
                 >
                   {isSubmitting ? 'Đang lưu...' : 'Lưu lại'}
                 </button>

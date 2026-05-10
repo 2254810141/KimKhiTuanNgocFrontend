@@ -190,17 +190,17 @@ function AdminProductPage() {
 
   return (
     <section className="space-y-5">
-      <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
+      <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-600">Quản lý Sản phẩm</p>
-            <h2 className="mt-2 text-2xl font-black text-zinc-900">Danh sách sản phẩm</h2>
+            <h2 className="mt-2 text-xl font-black text-zinc-900 sm:text-2xl">Danh sách sản phẩm</h2>
             <p className="mt-2 text-sm text-zinc-500">Quản lý ảnh, giá, danh mục, thương hiệu và trạng thái hoạt động.</p>
           </div>
           <button
             type="button"
             onClick={openCreateModal}
-            className="rounded-xl bg-amber-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-amber-700"
+            className="w-full rounded-xl bg-amber-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-amber-700 sm:w-auto"
           >
             + Thêm sản phẩm
           </button>
@@ -208,7 +208,7 @@ function AdminProductPage() {
       </div>
 
       {isLoading ? (
-        <div className="rounded-2xl border border-dashed border-zinc-300 bg-white p-8 text-center text-zinc-500 shadow-sm">
+        <div className="rounded-2xl border border-dashed border-zinc-300 bg-white p-6 text-center text-zinc-500 shadow-sm sm:p-8">
           Đang tải sản phẩm...
         </div>
       ) : error ? (
@@ -288,14 +288,14 @@ function AdminProductPage() {
       )}
 
       {modalOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 px-4 py-6">
-          <div className="mx-auto w-full max-w-3xl rounded-3xl bg-white p-6 shadow-2xl">
-            <div>
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 px-3 py-3 sm:px-4 sm:py-6">
+          <div className="mx-auto w-full max-w-3xl rounded-3xl bg-white p-5 shadow-2xl sm:p-6">
+            <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-600">
                   {selectedProduct ? 'Sửa sản phẩm' : 'Thêm sản phẩm'}
                 </p>
-                <h3 className="mt-1 text-2xl font-black text-zinc-900">
+                <h3 className="mt-1 text-xl font-black text-zinc-900 sm:text-2xl">
                   {selectedProduct ? 'Cập nhật sản phẩm' : 'Tạo mới sản phẩm'}
                 </h3>
               </div>
@@ -435,18 +435,18 @@ function AdminProductPage() {
                 </div>
               </div>
 
-              <div className="md:col-span-2 flex items-center justify-end gap-3 pt-2">
+              <div className="md:col-span-2 flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:items-center sm:justify-end">
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="rounded-xl border border-zinc-300 px-4 py-3 text-sm font-bold text-zinc-700 transition hover:bg-zinc-100"
+                  className="rounded-xl border border-zinc-300 px-4 py-3 text-sm font-bold text-zinc-700 transition hover:bg-zinc-100 sm:w-auto"
                 >
                   Hủy
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="rounded-xl bg-red-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-red-700 disabled:opacity-60"
+                  className="rounded-xl bg-red-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-red-700 disabled:opacity-60 sm:w-auto"
                 >
                   {isSubmitting ? 'Đang lưu...' : 'Lưu lại'}
                 </button>

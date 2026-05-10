@@ -32,7 +32,12 @@ function CheckoutPage({ cartItems = [], onRefreshCart = async () => {}, onClearC
 
   const hasContactItems = checkoutItems.some((item) => item.isContactPrice)
 
-    const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm({
     defaultValues: {
       customerName: '',
       customerPhone: '',
@@ -131,12 +136,12 @@ function CheckoutPage({ cartItems = [], onRefreshCart = async () => {}, onClearC
 
   if (checkoutItems.length === 0) {
     return (
-      <section className="container-app space-y-4 rounded-3xl border border-dashed border-zinc-300 bg-white p-8 text-center shadow-sm">
-        <h1 className="text-2xl font-black text-zinc-900">THANH TOÁN</h1>
+      <section className="container-app space-y-4 rounded-3xl border border-dashed border-zinc-300 bg-white p-6 text-center shadow-sm sm:p-8">
+        <h1 className="text-xl font-black text-zinc-900 sm:text-2xl">THANH TOÁN</h1>
         <p className="text-sm text-zinc-500">Giỏ hàng của bạn đang trống.</p>
         <Link
           to="/products"
-          className="inline-flex items-center justify-center rounded-lg bg-amber-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-amber-800"
+          className="inline-flex w-full items-center justify-center rounded-lg bg-amber-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-amber-800 sm:w-auto"
         >
           Quay lại mua sắm
         </Link>
@@ -145,10 +150,10 @@ function CheckoutPage({ cartItems = [], onRefreshCart = async () => {}, onClearC
   }
 
   return (
-    <section className="container-app space-y-6">
-      <div className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm">
+    <section className="container-app space-y-4 sm:space-y-6">
+      <div className="rounded-3xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-6">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-600">Checkout</p>
-        <h1 className="mt-2 text-3xl font-black text-zinc-900">Thanh toán đơn hàng</h1>
+        <h1 className="mt-2 text-2xl font-black text-zinc-900 sm:text-3xl">Thanh toán đơn hàng</h1>
         <p className="mt-2 text-sm text-zinc-500">
           {isAuthenticated
             ? 'Bạn có thể chọn thanh toán COD.'
@@ -157,17 +162,17 @@ function CheckoutPage({ cartItems = [], onRefreshCart = async () => {}, onClearC
       </div>
 
       {hasContactItems && (
-        <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+        <div className="rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800 sm:p-4">
           Có sản phẩm cần liên hệ trước khi đặt hàng. Vui lòng vào trang <Link to="/contact" className="font-semibold underline">Contact</Link>.
         </div>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm">
-          <h2 className="text-xl font-black text-zinc-900">Thông tin giao hàng</h2>
+      <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr] lg:gap-6">
+        <div className="rounded-3xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-6">
+          <h2 className="text-lg font-black text-zinc-900 sm:text-xl">Thông tin giao hàng</h2>
 
           <form className="mt-5 space-y-4" onSubmit={handleSubmit(onSubmit)}>
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className="mb-2 block text-sm font-semibold text-zinc-700">Họ và tên</label>
                 <input
@@ -211,9 +216,9 @@ function CheckoutPage({ cartItems = [], onRefreshCart = async () => {}, onClearC
             <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
               <p className="text-sm font-semibold text-zinc-700">Phương thức thanh toán</p>
               <div className="mt-3 space-y-3">
-                <label className="flex cursor-pointer items-center justify-between rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm">
+                <label className="flex cursor-pointer flex-col gap-2 rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm sm:flex-row sm:items-center sm:justify-between">
                   <span>Thanh toán khi nhận hàng (COD)</span>
-                  <input type="radio" value="cod" {...register('paymentMethod')} />
+                  <input type="radio" value="cod" className="h-4 w-4 shrink-0 accent-amber-700" {...register('paymentMethod')} />
                 </label>
 
                 {isAuthenticated ? null : (
@@ -232,11 +237,11 @@ function CheckoutPage({ cartItems = [], onRefreshCart = async () => {}, onClearC
           </form>
         </div>
 
-        <aside className="h-fit rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm">
-          <h2 className="text-xl font-black text-zinc-900">Đơn hàng của bạn</h2>
+        <aside className="h-fit rounded-3xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-6">
+          <h2 className="text-lg font-black text-zinc-900 sm:text-xl">Đơn hàng của bạn</h2>
           <div className="mt-5 space-y-4">
             {checkoutItems.map((item) => (
-              <div key={item.id} className="flex items-center gap-3 rounded-2xl border border-zinc-200 p-3">
+              <div key={item.id} className="flex flex-col gap-3 rounded-2xl border border-zinc-200 p-3 sm:flex-row sm:items-center">
                 <div className="h-16 w-16 overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100">
                   <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
                 </div>
@@ -244,7 +249,7 @@ function CheckoutPage({ cartItems = [], onRefreshCart = async () => {}, onClearC
                   <p className="truncate font-semibold text-zinc-900">{item.name}</p>
                   <p className="text-sm text-zinc-500">SL: {item.quantity}</p>
                 </div>
-                <div className="text-sm font-semibold text-zinc-900">
+                <div className="text-sm font-semibold text-zinc-900 sm:text-right">
                   {currency.format(Number(item.price ?? 0) * Number(item.quantity ?? 0))}
                 </div>
               </div>
@@ -256,7 +261,7 @@ function CheckoutPage({ cartItems = [], onRefreshCart = async () => {}, onClearC
               <span>Tạm tính</span>
               <span>{currency.format(subtotal)}</span>
             </div>
-            <div className="mt-2 flex items-center justify-between text-lg font-black text-zinc-900">
+            <div className="mt-2 flex items-center justify-between text-base font-black text-zinc-900 sm:text-lg">
               <span>Tổng tiền</span>
               <span>{currency.format(subtotal)}</span>
             </div>

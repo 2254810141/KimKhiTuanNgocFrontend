@@ -54,17 +54,17 @@ function ProductPage({ onAddToCart = () => {} }) {
 
   return (
     <section className="container-app space-y-5">
-      <div className="rounded-xl border border-amber-300 bg-amber-200 p-5 shadow-sm">
+      <div className="rounded-xl border border-amber-300 bg-amber-200 p-4 shadow-sm sm:p-5">
         <div>
           <p className="text-xs font-bold uppercase tracking-widest text-red-600">Tất cả sản phẩm</p>
-          <h2 className="mt-2 text-2xl font-black text-zinc-900">Danh sách dụng cụ và thiết bị</h2>
+          <h2 className="mt-2 text-xl font-black text-zinc-900 sm:text-2xl">Danh sách dụng cụ và thiết bị</h2>
         </div>
       </div>
 
       <ProductGrid products={paginatedProducts} onAddToCart={onAddToCart} />
 
       {products.length > 0 && (
-        <div className="flex items-center justify-center gap-2" role="navigation" aria-label="Phân trang sản phẩm">
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3" role="navigation" aria-label="Phân trang sản phẩm">
           <button
             type="button"
             className="rounded-lg border border-zinc-300 px-3 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-100 disabled:opacity-50"
@@ -73,7 +73,7 @@ function ProductPage({ onAddToCart = () => {} }) {
           >
             Trước
           </button>
-          <div className="flex items-center gap-2">
+          <div className="flex max-w-full flex-wrap items-center justify-center gap-2">
             {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
               <button
                 key={page}

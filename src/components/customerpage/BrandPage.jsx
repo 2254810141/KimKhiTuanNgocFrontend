@@ -64,23 +64,23 @@ function BrandPage({ onAddToCart = () => {} }) {
   const title = useMemo(() => brandName, [brandName])
 
   if (isLoading) {
-    return <section className="container-app">Đang tải thương hiệu...</section>
+    return <section className="container-app rounded-xl border border-dashed border-zinc-300 bg-white p-6 text-zinc-500 shadow-sm sm:p-8">Đang tải thương hiệu...</section>
   }
 
   if (error) {
-    return <section className="container-app text-amber-700">{error}</section>
+    return <section className="container-app rounded-xl border border-amber-200 bg-amber-50 p-5 text-amber-700 shadow-sm sm:p-6">{error}</section>
   }
 
   return (
     <section className="container-app space-y-5">
-      <div className="rounded-xl border border-amber-300 bg-amber-200 p-5 shadow-sm">
+      <div className="rounded-xl border border-amber-300 bg-amber-200 p-4 shadow-sm sm:p-5">
         <p className="text-xs font-bold uppercase tracking-widest text-amber-600">Thương hiệu</p>
-        <h1 className="mt-2 text-2xl font-bold text-zinc-900">{title}</h1>
+        <h1 className="mt-2 text-xl font-bold text-zinc-900 sm:text-2xl">{title}</h1>
         <p className="mt-2 text-sm text-zinc-500">Tìm thấy {products.length} sản phẩm đang kinh doanh.</p>
       </div>
 
       {products.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-zinc-300 bg-zinc-50 p-8 text-center text-zinc-500">
+        <div className="rounded-xl border border-dashed border-zinc-300 bg-zinc-50 p-6 text-center text-zinc-500 sm:p-8">
           Thương hiệu này chưa có sản phẩm.
         </div>
       ) : (
@@ -88,16 +88,16 @@ function BrandPage({ onAddToCart = () => {} }) {
           <ProductGrid products={paginatedProducts} onAddToCart={onAddToCart} />
 
           {products.length > PAGE_SIZE && (
-            <div className="flex items-center justify-center gap-2" role="navigation" aria-label="Phân trang thương hiệu">
+            <div className="flex flex-col items-stretch justify-center gap-2 sm:flex-row sm:items-center sm:gap-3" role="navigation" aria-label="Phân trang thương hiệu">
               <button
                 type="button"
-                className="rounded-lg border border-zinc-300 px-3 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-100 disabled:opacity-50"
+                className="rounded-lg border border-zinc-300 px-3 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-100 disabled:opacity-50 sm:w-auto"
                 onClick={() => goToPage(safeCurrentPage - 1)}
                 disabled={safeCurrentPage === 1}
               >
                 Trước
               </button>
-              <div className="flex items-center gap-2">
+              <div className="flex max-w-full flex-wrap items-center justify-center gap-2 sm:flex-1">
                 {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
                   <button
                     key={page}
@@ -115,7 +115,7 @@ function BrandPage({ onAddToCart = () => {} }) {
               </div>
               <button
                 type="button"
-                className="rounded-lg border border-zinc-300 px-3 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-100 disabled:opacity-50"
+                className="rounded-lg border border-zinc-300 px-3 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-100 disabled:opacity-50 sm:w-auto"
                 onClick={() => goToPage(safeCurrentPage + 1)}
                 disabled={safeCurrentPage === totalPages}
               >

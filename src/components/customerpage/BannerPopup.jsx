@@ -18,11 +18,11 @@ function BannerPopup() {
   if (!isVisible) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-      <div className="relative max-w-2xl w-full">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/55 p-3 sm:items-center sm:p-4">
+      <div className="relative w-full max-w-lg sm:max-w-2xl">
         <button
           onClick={handleClose}
-          className="absolute -top-2 -right-2 z-10 rounded-full bg-red-600 p-2 text-white shadow-lg hover:bg-red-700 transition-colors"
+          className="absolute -top-2 -right-2 z-10 rounded-full bg-red-600 p-2 text-white shadow-lg transition-colors hover:bg-red-700"
           aria-label="Đóng banner"
         >
           <svg
@@ -40,11 +40,11 @@ function BannerPopup() {
           </svg>
         </button>
         
-        <div className="rounded-xl overflow-hidden shadow-2xl">
+        <div className="overflow-hidden rounded-xl shadow-2xl">
           <img
             src="https://res.cloudinary.com/djbupbycd/image/upload/v1778231130/66302042094691731_hfo7xz.jpg"
             alt="Banner PhươngTrang Store"
-            className="w-full h-auto"
+            className="h-auto max-h-[78vh] w-full object-cover"
           />
         </div>
       </div>

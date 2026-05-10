@@ -47,23 +47,23 @@ function CategoryPage({ onAddToCart = () => {} }) {
   const title = categoryName
 
   if (isLoading) {
-    return <section className="container-app">Đang tải danh mục...</section>
+    return <section className="container-app rounded-xl border border-dashed border-zinc-300 bg-white p-6 text-zinc-500 shadow-sm sm:p-8">Đang tải danh mục...</section>
   }
 
   if (error) {
-    return <section className="container-app text-red-700">{error}</section>
+    return <section className="container-app rounded-xl border border-red-200 bg-red-50 p-5 text-red-700 shadow-sm sm:p-6">{error}</section>
   }
 
   return (
     <section className="container-app space-y-5">
-      <div className="rounded-xl border border-amber-300 bg-amber-200 p-5 shadow-sm">
+      <div className="rounded-xl border border-amber-300 bg-amber-200 p-4 shadow-sm sm:p-5">
         <p className="text-xs font-bold uppercase tracking-widest text-red-600">Danh mục</p>
-        <h1 className="mt-2 text-2xl font-bold text-zinc-900">{title}</h1>
+        <h1 className="mt-2 text-xl font-bold text-zinc-900 sm:text-2xl">{title}</h1>
         <p className="mt-2 text-sm text-zinc-500">Tìm thấy {products.length} sản phẩm đang kinh doanh.</p>
       </div>
 
       {products.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-zinc-300 bg-zinc-50 p-8 text-center text-zinc-500">
+        <div className="rounded-xl border border-dashed border-zinc-300 bg-zinc-50 p-6 text-center text-zinc-500 sm:p-8">
           Danh mục này chưa có sản phẩm.
         </div>
       ) : (

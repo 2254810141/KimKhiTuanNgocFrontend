@@ -50,9 +50,9 @@ function AdminLoginPage() {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-amber-50 px-4 py-10">
-      <div className="w-full max-w-md rounded-3xl border border-zinc-200 bg-white p-8 shadow-xl">
+      <div className="w-full max-w-md rounded-3xl border border-zinc-200 bg-white p-6 shadow-xl sm:p-8">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-600">Admin Panel</p>
-        <h1 className="mt-2 text-3xl font-black text-zinc-900">Đăng nhập quản trị</h1>
+        <h1 className="mt-2 text-2xl font-black text-zinc-900 sm:text-3xl">Đăng nhập quản trị</h1>
         <p className="mt-2 text-sm text-zinc-500">Đăng nhập bằng tài khoản admin để quản lý sản phẩm, danh mục và thương hiệu.</p>
 
         <form className="mt-6 space-y-4" onSubmit={handleSubmit(onSubmit)}>
@@ -93,7 +93,7 @@ function AdminLoginPage() {
           </button>
         </form>
 
-        <div className="mt-6 flex items-center justify-between gap-3 text-sm text-zinc-600">
+        <div className="mt-6 flex flex-col gap-3 text-sm text-zinc-600 sm:flex-row sm:items-center sm:justify-between">
           <span>Chưa có tài khoản admin?</span>
           <Link to="/admin/register" className="font-semibold text-amber-600 hover:underline">
             Đăng ký admin

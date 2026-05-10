@@ -53,7 +53,7 @@ function ProductDetailPage({ onAddToCart = () => {} }) {
 
   if (isLoading) {
     return (
-      <section className="container-app rounded-xl border border-zinc-200 bg-white p-8 text-zinc-500 shadow-sm">
+      <section className="container-app rounded-xl border border-zinc-200 bg-white p-6 text-zinc-500 shadow-sm sm:p-8">
         Đang tải thông tin sản phẩm...
       </section>
     )
@@ -61,7 +61,7 @@ function ProductDetailPage({ onAddToCart = () => {} }) {
 
   if (error) {
     return (
-      <section className="container-app space-y-3 rounded-xl border border-red-200 bg-red-50 p-6 text-red-700">
+      <section className="container-app space-y-3 rounded-xl border border-red-200 bg-red-50 p-5 text-red-700 sm:p-6">
         <p>{error}</p>
         <Link to="/products" className="font-semibold underline">
           Quay lại danh sách
@@ -72,7 +72,7 @@ function ProductDetailPage({ onAddToCart = () => {} }) {
 
   if (!product) {
     return (
-      <section className="container-app space-y-3 rounded-xl border border-zinc-200 bg-white p-6 text-zinc-600 shadow-sm">
+      <section className="container-app space-y-3 rounded-xl border border-zinc-200 bg-white p-5 text-zinc-600 shadow-sm sm:p-6">
         <p>Không tìm thấy sản phẩm.</p>
         <Link to="/products" className="font-semibold text-red-700 hover:text-red-800">
           Quay lại danh sách
@@ -83,7 +83,7 @@ function ProductDetailPage({ onAddToCart = () => {} }) {
 
   if (!product.isActive) {
     return (
-      <section className="container-app space-y-3 rounded-xl border border-zinc-200 bg-white p-6 text-zinc-600 shadow-sm">
+      <section className="container-app space-y-3 rounded-xl border border-zinc-200 bg-white p-5 text-zinc-600 shadow-sm sm:p-6">
         <p>Sản phẩm này hiện không còn hoạt động.</p>
         <Link to="/products" className="font-semibold text-red-700 hover:text-red-800">
           Quay lại danh sách
@@ -94,9 +94,9 @@ function ProductDetailPage({ onAddToCart = () => {} }) {
 
   return (
     <section className="container-app">
-      <div className="grid gap-6 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm lg:grid-cols-2 lg:p-6">
+      <div className="grid gap-5 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-5 lg:grid-cols-2 lg:p-6">
         <div className="space-y-4">
-          <div className="text-sm text-zinc-500">
+          <div className="truncate text-xs text-zinc-500 sm:text-sm">
             <Link to="/products" className="font-medium text-zinc-600 hover:text-red-700">
               Sản phẩm
             </Link>{' '}
@@ -104,7 +104,7 @@ function ProductDetailPage({ onAddToCart = () => {} }) {
           </div>
 
           <div className="overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100">
-            <img src={product.image} alt={product.name} className="h-80 w-full object-cover object-center" />
+            <img src={product.image} alt={product.name} className="h-56 w-full object-cover object-center sm:h-72 lg:h-80" />
           </div>
 
           <div className="flex flex-wrap gap-2 text-xs text-zinc-500">
@@ -115,11 +115,11 @@ function ProductDetailPage({ onAddToCart = () => {} }) {
         </div>
 
         <div className="space-y-5">
-          <h1 className="text-2xl font-black text-zinc-900">{product.name}</h1>
+          <h1 className="text-xl font-black leading-tight text-zinc-900 sm:text-2xl">{product.name}</h1>
 
           <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
             <p className="text-sm text-zinc-500">Giá bán</p>
-            <div className="mt-1 text-3xl font-black text-red-700">{product.displayPrice}</div>
+            <div className="mt-1 text-2xl font-black text-red-700 sm:text-3xl">{product.displayPrice}</div>
             {product.isContactPrice && <p className="mt-2 text-sm text-zinc-500">Sản phẩm này báo giá theo liên hệ.</p>}
           </div>
 
@@ -137,24 +137,24 @@ function ProductDetailPage({ onAddToCart = () => {} }) {
             </div>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row">
             <Link
               to="/products"
-              className="inline-flex items-center justify-center rounded-lg border border-zinc-300 px-4 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-100"
+              className="inline-flex w-full items-center justify-center rounded-lg border border-zinc-300 px-4 py-3 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-100 sm:w-auto sm:py-2"
             >
               Quay lại
             </Link>
             {product.isContactPrice ? (
               <Link
                 to="/contact"
-                className="inline-flex items-center justify-center rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-amber-600"
+                className="inline-flex w-full items-center justify-center rounded-lg bg-amber-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-amber-600 sm:w-auto sm:py-2"
               >
                 Liên hệ
               </Link>
             ) : (
               <button
                 type="button"
-                className="inline-flex items-center justify-center rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-800"
+                className="inline-flex w-full items-center justify-center rounded-lg bg-red-700 px-4 py-3 text-sm font-semibold text-white transition hover:bg-red-800 sm:w-auto sm:py-2"
                 onClick={() => onAddToCart(product)}
               >
                 Thêm vào giỏ hàng

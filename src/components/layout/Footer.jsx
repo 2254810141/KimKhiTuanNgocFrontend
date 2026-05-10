@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 function Footer() {
   return (
     <footer className="border-t border-amber-700 bg-amber-900 text-amber-100">
-      <div className="container-app grid gap-8 py-10 md:grid-cols-3">
+      <div className="container-app grid gap-7 py-8 sm:py-10 md:grid-cols-3">
         <div>
-          <p className="text-lg font-extrabold text-amber-400">Kim Khí Tuấn Ngọc</p>
+          <p className="text-base font-extrabold text-amber-400 sm:text-lg">Kim Khí Tuấn Ngọc</p>
           <p className="mt-2 text-sm text-amber-200">
             Chuyên dụng cụ cầm tay, máy hàn, máy công trình và vật tư kim khí chính hãng.
           </p>
@@ -37,7 +37,7 @@ function Footer() {
       </div>
 
       <div className="border-t border-amber-700 py-4 text-center text-xs text-amber-200">
-        <div className="container-app flex flex-wrap items-center justify-between gap-2">
+        <div className="container-app flex flex-col items-start justify-between gap-1 sm:flex-row sm:items-center sm:gap-2">
           <span>© 2026 Kim Khí Tuấn Ngọc. All rights reserved.</span>
           <span>Giao nhanh nội thành - Hỗ trợ kỹ thuật tận nơi</span>
         </div>

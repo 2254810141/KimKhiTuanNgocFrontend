@@ -88,14 +88,14 @@ function Header({ cartCount = 0 }) {
 
   return (
     <header className="sticky top-0 z-40 border-b border-amber-700 bg-amber-900 text-white shadow-panel">
-      <div className="w-full px-4 xl:px-8">
-        <div className="flex flex-wrap items-center gap-3 py-3 sm:gap-4 lg:flex-nowrap lg:gap-6 xl:gap-8">
+      <div className="w-full px-3 sm:px-4 xl:px-8">
+        <div className="flex flex-wrap items-center gap-2 py-2 sm:gap-4 sm:py-3 lg:flex-nowrap lg:gap-6 xl:gap-8">
           <Link to="/" className="group flex min-w-0 shrink-0 items-center gap-2 whitespace-nowrap sm:gap-3">
-            <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-amber-700 text-base font-black sm:h-10 sm:w-10 sm:text-lg">
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-amber-700 text-sm font-black sm:h-10 sm:w-10 sm:text-lg">
               TN
             </span>
             <div className="min-w-0">
-              <p className="truncate text-base font-extrabold tracking-wide text-amber-500 sm:text-lg">Kim Khí Tuấn Ngọc</p>
+              <p className="truncate text-sm font-extrabold tracking-wide text-amber-500 sm:text-lg">Kim Khí Tuấn Ngọc</p>
               <p className="hidden whitespace-nowrap text-xs uppercase tracking-widest text-amber-200 sm:block">
                 Dụng cụ cầm tay - thiết bị cơ khí
               </p>
@@ -205,7 +205,7 @@ function Header({ cartCount = 0 }) {
           <div className="ml-auto flex shrink-0 items-center gap-2 lg:ml-0">
             <Link
               to="/cart"
-              className="relative whitespace-nowrap rounded-lg border border-amber-700 px-3 py-2 text-xs font-semibold text-amber-50 transition hover:border-amber-500 sm:text-sm"
+              className="relative whitespace-nowrap rounded-lg border border-amber-700 px-3 py-2 text-xs font-semibold text-amber-50 transition hover:border-amber-500 sm:px-4 sm:text-sm"
             >
               Giỏ hàng
               {cartCount > 0 && (
@@ -295,28 +295,38 @@ function Header({ cartCount = 0 }) {
 
             <button
               type="button"
-              className="inline-flex shrink-0 rounded-lg border border-amber-700 p-2 lg:hidden"
-              onClick={() => setOpenMobileMenu((prev) => !prev)}
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-amber-700 lg:hidden"
+              onClick={() => {
+                setOpenMobileMenu((prev) => !prev)
+                setOpenAccountMenu(false)
+                setOpenDropdown(false)
+                setOpenBrandDropdown(false)
+              }}
               aria-label="Mở menu"
+              aria-expanded={openMobileMenu}
             >
-              <span className="h-0.5 w-5 bg-white" />
+              <span className="flex flex-col gap-1.5">
+                <span className="h-0.5 w-5 rounded bg-white" />
+                <span className="h-0.5 w-5 rounded bg-white" />
+                <span className="h-0.5 w-5 rounded bg-white" />
+              </span>
             </button>
           </div>
         </div>
 
         {openMobileMenu && (
-          <div className="space-y-4 border-t border-amber-700 pb-4 pt-4 lg:hidden">
-            <form onSubmit={handleSearchSubmit}>
+          <div className="max-h-[calc(100vh-4rem)] space-y-3 overflow-y-auto border-t border-amber-700 px-1 pb-4 pt-3 lg:hidden">
+            <form onSubmit={handleSearchSubmit} className="px-2">
               <input
                 type="search"
                 value={searchKeyword}
                 onChange={(event) => setSearchKeyword(event.target.value)}
                 placeholder="Tìm sản phẩm"
-                className="w-full rounded-lg border border-amber-700 bg-amber-800 px-4 py-2 text-sm text-amber-50 outline-none"
+                className="w-full rounded-lg border border-amber-700 bg-amber-800 px-4 py-3 text-sm text-amber-50 outline-none placeholder:text-amber-200"
               />
             </form>
 
-            <div className="grid gap-2">
+            <div className="grid gap-1.5 px-2">
               {navLinks.map((item) => (
                 <NavLink
                   key={item.to}
@@ -329,11 +339,11 @@ function Header({ cartCount = 0 }) {
               ))}
             </div>
 
-            <div className="rounded-lg border border-amber-700 bg-amber-800 p-3">
+            <div className="rounded-xl border border-amber-700 bg-amber-800 p-2.5 sm:p-3">
               <button
                 type="button"
                 onClick={() => setOpenAccountMenu((prev) => !prev)}
-                className="flex w-full items-center justify-between rounded-lg border border-amber-700 px-3 py-2 text-sm font-semibold text-amber-50"
+                className="flex w-full items-center justify-between rounded-lg border border-amber-700 px-3 py-2.5 text-sm font-semibold text-amber-50"
               >
                 <span>{session ? userName : 'Tài khoản'}</span>
                 <span className="text-xs text-amber-200">{session ? 'Đã đăng nhập' : 'Đăng nhập / Đăng ký'}</span>
@@ -401,9 +411,9 @@ function Header({ cartCount = 0 }) {
               )}
             </div>
 
-            <div className="rounded-lg border border-amber-700 bg-amber-800 p-3">
+            <div className="rounded-xl border border-amber-700 bg-amber-800 p-2.5 sm:p-3">
               <p className="mb-2 text-xs font-bold uppercase tracking-wide text-amber-300">Danh mục nổi bật</p>
-              <div className="grid max-h-44 grid-cols-2 gap-2 overflow-y-auto pr-1">
+              <div className="grid max-h-44 grid-cols-1 gap-2 overflow-y-auto pr-1 min-[420px]:grid-cols-2">
                 {categoryList.length > 0 ? (
                   categoryList.map((category) => (
                     <Link
@@ -423,9 +433,9 @@ function Header({ cartCount = 0 }) {
               </div>
             </div>
 
-            <div className="rounded-lg border border-amber-700 bg-amber-800 p-3">
+            <div className="rounded-xl border border-amber-700 bg-amber-800 p-2.5 sm:p-3">
               <p className="mb-2 text-xs font-bold uppercase tracking-wide text-amber-300">Thương hiệu nổi bật</p>
-              <div className="grid max-h-44 grid-cols-2 gap-2 overflow-y-auto pr-1 sm:grid-cols-3">
+              <div className="grid max-h-44 grid-cols-1 gap-2 overflow-y-auto pr-1 min-[420px]:grid-cols-2 sm:grid-cols-3">
                 {brandList.length > 0 ? (
                   brandList.map((brand) => (
                     <Link

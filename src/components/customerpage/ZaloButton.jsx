@@ -1,19 +1,18 @@
 function ZaloButton() {
-  const zaloPhone = "0933901128" // Thay bằng số Zalo của bạn
+  const zaloPhone = '0933901128'
   
   const handleZaloClick = () => {
-    // Mở Zalo qua URL scheme
     window.open(`https://zalo.me/${zaloPhone}`, '_blank')
   }
 
   return (
     <button
       onClick={handleZaloClick}
-      className="fixed bottom-20 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 shadow-lg transition-all hover:bg-blue-700 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-blue-300"
+      className="fixed bottom-20 right-4 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 shadow-lg transition-all hover:bg-blue-700 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-blue-300 sm:bottom-20 sm:right-6 sm:h-14 sm:w-14"
       aria-label="Nhắn tin Zalo"
     >
       <svg
-        className="h-8 w-8 text-white"
+        className="h-7 w-7 text-white sm:h-8 sm:w-8"
         fill="currentColor"
         viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg"
