@@ -18,6 +18,12 @@ api.interceptors.request.use(
     if (session?.accessToken) {
       config.headers.Authorization = `Bearer ${session.accessToken}`
     }
+    
+    // Xử lý FormData: không set Content-Type để browser tự set multipart/form-data
+    if (config.data instanceof FormData) {
+      delete config.headers['Content-Type']
+    }
+    
     return config
   },
   (error) => Promise.reject(error)

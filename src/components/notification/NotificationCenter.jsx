@@ -50,23 +50,16 @@ function NotificationCenter() {
           >
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1">
-                <h3 className="font-bold text-green-700 text-sm">🎉 Đơn hàng mới</h3>
+                <h3 className="font-bold text-green-700 text-sm">🎉 {toast.notification.title || 'Đơn hàng mới'}</h3>
                 <div className="mt-2 space-y-1 text-sm text-zinc-700">
-                  <p>
-                    <span className="font-semibold">Khách:</span> {toast.notification.customerName}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Số điện thoại:</span> {toast.notification.customerPhone}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Tổng tiền:</span>{' '}
-                    <span className="text-amber-600 font-bold">{formatVnd(toast.notification.totalAmount)}</span>
-                  </p>
-                  <p>
-                    <span className="font-semibold">Sản phẩm:</span> {toast.notification.itemCount} mục
-                  </p>
+                  <p>{toast.notification.message || 'Có đơn hàng mới'}</p>
+                  {toast.notification.orderId && (
+                    <p className="text-xs text-zinc-500">
+                      Mã đơn: #{toast.notification.orderId}
+                    </p>
+                  )}
                   <p className="text-xs text-zinc-500 mt-2">
-                    {new Date(toast.notification.createdAt).toLocaleTimeString('vi-VN')}
+                    {toast.notification.createdAt ? new Date(toast.notification.createdAt).toLocaleTimeString('vi-VN') : ''}
                   </p>
                 </div>
               </div>
@@ -85,4 +78,3 @@ function NotificationCenter() {
 }
 
 export default NotificationCenter
-
