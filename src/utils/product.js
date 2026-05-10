@@ -1,0 +1,41 @@
+import { API_BASE_URL } from './apiBaseUrl'
+
+export const PLACEHOLDER_IMAGE = '/product-placeholder.svg'
+
+export function toAbsoluteImageUrl(path) {
+  if (!path) return PLACEHOLDER_IMAGE
+  if (path.startsWith('http://') || path.startsWith('https://')) return path
+
+  const normalized = path.startsWith('/') ? path.slice(1) : path
+  return `${API_BASE_URL}/${normalized}`
+}
+
+export function formatVnd(price) {
+  return `${Number(price ?? 0).toLocaleString('vi-VN')}d`
+}
+
+export function mapProductDto(item) {
+  const id = item.id ?? item.Id ?? item.productId ?? item.ProductId
+  const name = item.name ?? item.Name ?? item.productName ?? item.ProductName ?? 'Sản phẩm'
+  const image = item.image ?? item.Image ?? item.productsImages ?? item.ProductsImages
+  const categoryId = item.categoryId ?? item.CategoryId ?? 0
+  const brandId = item.brandId ?? item.BrandId ?? 0
+  const price = Number(item.price ?? item.Price ?? 0)
+  const isContactPrice = Boolean(item.isContactPrice ?? item.IsContactPrice)
+  const isActive = item.isActive ?? item.IsActive ?? true
+  const description = item.description ?? item.Description ?? ''
+
+  return {
+    id: String(id ?? ''),
+    name,
+    price,
+    image: toAbsoluteImageUrl(image),
+    isContactPrice,
+    isActive,
+    categoryId: Number(categoryId ?? 0),
+    brandId: Number(brandId ?? 0),
+    description,
+    displayPrice: isContactPrice ? 'Liên hệ' : formatVnd(price),
+  }
+}
+
