@@ -115,10 +115,16 @@ function CheckoutPage({ cartItems = [], onRefreshCart = async () => {}, onClearC
       })
       navigate(isAuthenticated ? '/orders' : '/', { replace: true })
     } catch (error) {
+      const apiMessage =
+        error?.response?.data?.detail ||
+        error?.response?.data?.message ||
+        error?.response?.data?.title ||
+        null
+
       await Swal.fire({
         icon: 'error',
         title: 'Thanh toán thất bại',
-        text: error instanceof Error ? error.message : 'Không thể xử lý thanh toán',
+        text: apiMessage || (error instanceof Error ? error.message : 'Không thể xử lý thanh toán'),
       })
     }
   }
