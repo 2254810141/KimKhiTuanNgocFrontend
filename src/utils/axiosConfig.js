@@ -21,7 +21,7 @@ api.interceptors.request.use(
     
     // Xử lý FormData: không set Content-Type để browser tự set multipart/form-data
     if (config.data instanceof FormData) {
-      delete config.headers['Content-Type']
+      config.headers['Content-Type'] = undefined
     }
     
     return config
