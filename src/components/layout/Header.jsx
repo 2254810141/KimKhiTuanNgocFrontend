@@ -89,14 +89,14 @@ function Header({ cartCount = 0 }) {
   return (
     <header className="sticky top-0 z-40 border-b border-amber-700 bg-amber-900 text-white shadow-panel">
       <div className="w-full px-4 xl:px-8">
-        <div className="flex flex-nowrap items-center gap-6 py-4 xl:gap-8">
-          <Link to="/" className="group flex shrink-0 items-center gap-3 whitespace-nowrap">
-            <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-amber-700 text-lg font-black">
+        <div className="flex flex-wrap items-center gap-3 py-3 sm:gap-4 lg:flex-nowrap lg:gap-6 xl:gap-8">
+          <Link to="/" className="group flex min-w-0 shrink-0 items-center gap-2 whitespace-nowrap sm:gap-3">
+            <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-amber-700 text-base font-black sm:h-10 sm:w-10 sm:text-lg">
               TN
             </span>
-            <div>
-              <p className="whitespace-nowrap text-lg font-extrabold tracking-wide text-amber-500">Kim Khí Tuấn Ngọc</p>
-              <p className="whitespace-nowrap text-xs uppercase tracking-widest text-amber-200">
+            <div className="min-w-0">
+              <p className="truncate text-base font-extrabold tracking-wide text-amber-500 sm:text-lg">Kim Khí Tuấn Ngọc</p>
+              <p className="hidden whitespace-nowrap text-xs uppercase tracking-widest text-amber-200 sm:block">
                 Dụng cụ cầm tay - thiết bị cơ khí
               </p>
             </div>
@@ -202,10 +202,10 @@ function Header({ cartCount = 0 }) {
             />
           </form>
 
-          <div className="ml-auto flex items-center gap-2 lg:ml-0">
+          <div className="ml-auto flex shrink-0 items-center gap-2 lg:ml-0">
             <Link
               to="/cart"
-              className="relative whitespace-nowrap rounded-lg border border-amber-700 px-3 py-2 text-sm font-semibold text-amber-50 transition hover:border-amber-500"
+              className="relative whitespace-nowrap rounded-lg border border-amber-700 px-3 py-2 text-xs font-semibold text-amber-50 transition hover:border-amber-500 sm:text-sm"
             >
               Giỏ hàng
               {cartCount > 0 && (
@@ -295,7 +295,7 @@ function Header({ cartCount = 0 }) {
 
             <button
               type="button"
-              className="inline-flex rounded-lg border border-amber-700 p-2 lg:hidden"
+              className="inline-flex shrink-0 rounded-lg border border-amber-700 p-2 lg:hidden"
               onClick={() => setOpenMobileMenu((prev) => !prev)}
               aria-label="Mở menu"
             >

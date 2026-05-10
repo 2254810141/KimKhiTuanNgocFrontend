@@ -16,7 +16,7 @@ function StoreLayout({ cartCount = 0 }) {
         <Link
           to="/order-lookup"
           aria-label="Tra cứu đơn hàng"
-          className="fixed bottom-5 right-5 z-50 inline-flex max-w-[calc(100vw-2.5rem)] items-center gap-2 rounded-full bg-amber-700 px-5 py-3 text-xs font-bold text-white shadow-xl transition hover:bg-amber-800 sm:text-sm"
+          className="fixed bottom-4 right-4 z-50 inline-flex max-w-[calc(100vw-1rem)] items-center gap-2 rounded-full bg-amber-700 px-4 py-2 text-[11px] font-bold text-white shadow-xl transition hover:bg-amber-800 sm:bottom-5 sm:right-5 sm:max-w-[calc(100vw-2.5rem)] sm:px-5 sm:py-3 sm:text-sm"
         >
           <span className="truncate">Tra cứu đơn hàng</span>
         </Link>
