@@ -12,7 +12,7 @@ function ProductGrid({ products, onAddToCart = () => {} }) {
             <img
               src={product.image}
               alt={product.name}
-              className="h-52 w-full object-cover object-center transition duration-300 group-hover:scale-[1.03]"
+              className="h-44 sm:h-52 w-full object-cover object-center transition duration-300 group-hover:scale-[1.03]"
             />
           </Link>
 

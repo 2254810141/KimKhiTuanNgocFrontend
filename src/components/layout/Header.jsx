@@ -129,7 +129,7 @@ function Header({ cartCount = 0 }) {
               </button>
 
               {openDropdown && (
-                <div className="absolute left-0 top-full z-50 w-[780px] pt-2">
+                <div className="absolute left-0 top-full z-50 w-[780px] max-w-[90vw] pt-2">
                   <div className="max-h-[70vh] overflow-y-auto rounded-xl border border-amber-700 bg-amber-800 p-4 shadow-xl">
                     <div className="grid grid-cols-2 gap-2">
                       {categoryList.length > 0 ? (
@@ -166,8 +166,8 @@ function Header({ cartCount = 0 }) {
                 <span className="text-xs text-amber-200">({brandCount})</span>
               </button>
 
-              {openBrandDropdown && (
-                <div className="absolute left-0 top-full z-50 w-[520px] pt-2">
+               {openBrandDropdown && (
+                <div className="absolute left-0 top-full z-50 w-[520px] max-w-[90vw] pt-2">
                   <div className="max-h-[70vh] overflow-y-auto rounded-xl border border-amber-700 bg-amber-800 p-4 shadow-xl">
                     <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                       {brandList.length > 0 ? (
