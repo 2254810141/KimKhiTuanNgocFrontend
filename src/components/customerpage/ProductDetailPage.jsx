@@ -216,8 +216,8 @@ function ProductDetailPage({ onAddToCart = () => {} }) {
       <div className="mt-6 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-5">
         <div className="mb-4 flex items-center justify-between gap-3">
           <div>
-            <h2 className="text-lg font-black text-zinc-900 sm:text-xl">Sản phẩm cùng danh mục</h2>
-            <p className="text-sm text-zinc-500">Cuộn ngang để xem thêm các sản phẩm liên quan.</p>
+            <h2 className="text-lg font-black text-zinc-900 sm:text-xl">Sản phẩm liên quan :</h2>
+            <p className="text-sm text-zinc-500">Cuộn ngang để xem thêm các sản phẩm có cùng danh mục.</p>
           </div>
         </div>
 
