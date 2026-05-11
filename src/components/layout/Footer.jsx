@@ -32,7 +32,7 @@ function Footer() {
           <a href="mailto:kimkhituanngoc@gmail.com" className="block hover:text-amber-300">
             kimkhituanngoc@gmail.com
           </a>
-          <p className="text-amber-200">08:00 - 05:00 (T2 - T6)</p>
+          <p className="text-amber-200">08:00 - 17:00 (T2 - T6)</p>
         </div>
       </div>
 
