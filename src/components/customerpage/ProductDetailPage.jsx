@@ -149,8 +149,12 @@ function ProductDetailPage({ onAddToCart = () => {} }) {
             / <span className="text-zinc-900">{product.name}</span>
           </div>
 
-          <div className="overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100">
-            <img src={product.image} alt={product.name} className="h-56 w-full object-cover object-center sm:h-72 lg:h-80" />
+          <div className="flex items-center justify-center overflow-hidden rounded-xl border border-zinc-200 bg-white p-2">
+            <img
+              src={product.image}
+              alt={product.name}
+              className="h-56 w-full object-contain object-center sm:h-72 lg:h-80"
+            />
           </div>
 
           <div className="flex flex-wrap gap-2 text-xs text-zinc-500">
