@@ -54,9 +54,9 @@ function appendProductFormData(formData, payload) {
     formData.append('BrandId', String(payload.brandId))
   }
 
-  formData.append('IsContactPrice', String(Boolean(payload.isContactPrice)))
-  formData.append('IsActive', String(Boolean(payload.isActive)))
-  formData.append('IsVatExempt', String(Boolean(payload.isVatExempt)))
+  formData.append('IsContactPrice', payload.isContactPrice ? 'true' : 'false')
+  formData.append('IsActive', payload.isActive ? 'true' : 'false')
+  formData.append('IsVatExempt', payload.isVatExempt ? 'true' : 'false')
   formData.append('VatRate', String(payload.isVatExempt ? 0 : Number(payload.vatRate ?? 10)))
 
   if (!payload.isContactPrice && payload.price !== undefined && payload.price !== null && payload.price !== '') {
