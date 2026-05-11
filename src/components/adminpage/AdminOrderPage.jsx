@@ -297,7 +297,7 @@ function AdminOrderPage() {
                       <div className="text-sm font-medium text-zinc-900">{order.customerName}</div>
                       <div className="text-xs text-zinc-500">{order.customerPhone}</div>
                     </td>
-                    <td className="px-4 py-3 text-sm font-semibold text-zinc-900">{formatVnd(order.totalAmount)}</td>
+                    <td className="px-4 py-3 text-sm font-semibold text-zinc-900">{formatVnd(order.grandTotal ?? order.totalAmount)}</td>
                     <td className="px-4 py-3 text-sm text-zinc-700">{order.paymentMethod}</td>
                     <td className="px-4 py-3">
                       <span
@@ -405,11 +405,23 @@ function AdminOrderPage() {
                       </tbody>
                       <tfoot className="bg-zinc-50">
                         <tr>
+                          <td colSpan="3" className="px-3 py-2 text-right text-sm font-semibold text-zinc-900">Tạm tính:</td>
+                          <td className="px-3 py-2 text-right text-sm font-bold text-zinc-900">
+                            {formatVnd(selectedOrder.subTotal ?? selectedOrder.totalAmount)}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colSpan="3" className="px-3 py-2 text-right text-sm font-semibold text-zinc-900">Thuế VAT:</td>
+                          <td className="px-3 py-2 text-right text-sm font-bold text-zinc-900">
+                            {formatVnd(selectedOrder.totalVat ?? 0)}
+                          </td>
+                        </tr>
+                        <tr>
                           <td colSpan="3" className="px-3 py-2 text-right text-sm font-semibold text-zinc-900">
                             Tổng cộng:
                           </td>
                           <td className="px-3 py-2 text-right text-sm font-bold text-amber-700">
-                            {formatVnd(selectedOrder.totalAmount)}
+                            {formatVnd(selectedOrder.grandTotal ?? selectedOrder.totalAmount)}
                           </td>
                         </tr>
                       </tfoot>

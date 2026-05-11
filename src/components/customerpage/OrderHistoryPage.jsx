@@ -160,7 +160,7 @@ function OrderHistoryPage() {
 
                   <div className="text-left lg:text-right">
                     <p className="text-sm text-zinc-500">Tổng tiền</p>
-                    <p className="text-xl font-black text-amber-700 sm:text-2xl">{formatVnd(order.totalAmount)}</p>
+                    <p className="text-xl font-black text-amber-700 sm:text-2xl">{formatVnd(order.grandTotal ?? order.totalAmount)}</p>
                     {canCancel && (
                       <button
                         type="button"
@@ -186,6 +186,7 @@ function OrderHistoryPage() {
                       <div className="min-w-0 flex-1">
                         <p className="truncate font-semibold text-zinc-900">{item.productName}</p>
                         <p className="text-sm text-zinc-500">SL: {item.quantity}</p>
+                        <p className="text-xs text-zinc-500">{item.isVatExempt ? 'Miễn thuế VAT' : `${item.vatRate ?? 10}% VAT`}</p>
                       </div>
                       <div className="text-sm font-semibold text-zinc-900 sm:text-right">{formatVnd(item.price * item.quantity)}</div>
                     </div>

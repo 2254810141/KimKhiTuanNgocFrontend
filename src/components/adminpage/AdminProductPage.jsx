@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Swal from 'sweetalert2'
 import {
@@ -20,6 +20,7 @@ function AdminProductPage() {
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const prevVatExemptRef = useRef(false)
 
   const {
     register,
@@ -32,6 +33,8 @@ function AdminProductPage() {
     defaultValues: {
       name: '',
       price: '',
+      vatRate: 10,
+      isVatExempt: false,
       categoryId: '',
       brandId: '',
       isContactPrice: false,
@@ -43,6 +46,7 @@ function AdminProductPage() {
   })
 
   const isContactPrice = watch('isContactPrice')
+  const isVatExempt = watch('isVatExempt')
   const imageUrl = watch('imageUrl')
 
   useEffect(() => {
@@ -50,6 +54,13 @@ function AdminProductPage() {
       setValue('price', '')
     }
   }, [isContactPrice, setValue])
+
+  useEffect(() => {
+    if (prevVatExemptRef.current !== isVatExempt) {
+      setValue('vatRate', isVatExempt ? 0 : 10)
+    }
+    prevVatExemptRef.current = isVatExempt
+  }, [isVatExempt, setValue])
 
   const categoryMap = useMemo(
     () => new Map(categories.map((item) => [String(item.id), item.name])),
@@ -91,9 +102,12 @@ function AdminProductPage() {
     reset({
       name: '',
       price: '',
+      vatRate: 10,
+      isVatExempt: false,
       categoryId: '',
       brandId: '',
       isContactPrice: false,
+      isActive: true,
       imageUrl: '',
       description: '',
       imageFile: null,
@@ -106,9 +120,12 @@ function AdminProductPage() {
     reset({
       name: product.name ?? '',
       price: product.price ?? '',
+      vatRate: product.isVatExempt ? 0 : product.vatRate ?? 10,
+      isVatExempt: Boolean(product.isVatExempt),
       categoryId: product.categoryId ? String(product.categoryId) : '',
       brandId: product.brandId ? String(product.brandId) : '',
       isContactPrice: Boolean(product.isContactPrice),
+      isActive: Boolean(product.isActive),
       imageUrl: product.image ?? '',
       description: product.description ?? '',
       imageFile: null,
@@ -154,8 +171,10 @@ function AdminProductPage() {
         categoryId: values.categoryId ? Number(values.categoryId) : null,
         brandId: values.brandId ? Number(values.brandId) : null,
         isContactPrice: Boolean(values.isContactPrice),
-        isActive: true,
+        isActive: Boolean(values.isActive),
         price: values.isContactPrice ? null : values.price === '' ? null : Number(values.price),
+        vatRate: values.isVatExempt ? 0 : Number(values.vatRate ?? 10),
+        isVatExempt: Boolean(values.isVatExempt),
         imageUrl: values.imageUrl?.trim() || '',
         imageFile: values.imageFile?.[0] ?? null,
         description: values.description?.trim() || '',
@@ -200,7 +219,7 @@ function AdminProductPage() {
           <button
             type="button"
             onClick={openCreateModal}
-            className="w-full rounded-xl bg-amber-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-amber-700 sm:w-auto"
+            className="w-full rounded-xl bg-amber-700 px-4 py-3 text-sm font-bold text-white transition hover:bg-amber-800 sm:w-auto"
           >
             + Thêm sản phẩm
           </button>
@@ -222,6 +241,7 @@ function AdminProductPage() {
                   <th className="px-4 py-3">Ảnh</th>
                   <th className="px-4 py-3">Tên</th>
                   <th className="px-4 py-3">Giá</th>
+                      <th className="px-4 py-3">VAT</th>
                   <th className="px-4 py-3">Danh mục</th>
                   <th className="px-4 py-3">Thương hiệu</th>
                   <th className="px-4 py-3">Trạng thái</th>
@@ -242,6 +262,17 @@ function AdminProductPage() {
                       <td className="px-4 py-4 font-semibold text-zinc-900">{product.name}</td>
                       <td className="px-4 py-4 text-zinc-700">
                         {product.isContactPrice ? 'Liên hệ' : formatVnd(product.price)}
+                      </td>
+                      <td className="px-4 py-4 text-zinc-700">
+                        {product.isVatExempt ? (
+                          <span className="inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-700">
+                            Miễn thuế VAT
+                          </span>
+                        ) : (
+                          <span className="inline-flex rounded-full bg-yellow-100 px-3 py-1 text-xs font-bold text-yellow-800">
+                            {product.vatRate ?? 10}% VAT
+                          </span>
+                        )}
                       </td>
                       <td className="px-4 py-4 text-zinc-700">{categoryMap.get(String(product.categoryId)) ?? '—'}</td>
                       <td className="px-4 py-4 text-zinc-700">{brandMap.get(String(product.brandId)) ?? '—'}</td>
@@ -276,7 +307,7 @@ function AdminProductPage() {
                   ))
                 ) : (
                   <tr>
-                    <td className="px-4 py-10 text-center text-zinc-500" colSpan={7}>
+                    <td className="px-4 py-10 text-center text-zinc-500" colSpan={8}>
                       Chưa có sản phẩm nào.
                     </td>
                   </tr>
@@ -341,9 +372,9 @@ function AdminProductPage() {
                 <label className="mb-2 block text-sm font-semibold text-zinc-700" htmlFor="product-brand">
                   Thương hiệu
                 </label>
-                <select
-                  id="product-brand"
-                  className="w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm outline-none transition focus:border-red-500"
+                  <select
+                    id="product-brand"
+                    className="w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm outline-none transition focus:border-amber-500"
                   {...register('brandId', { required: 'Vui lòng chọn thương hiệu' })}
                 >
                   <option value="">-- Chọn thương hiệu --</option>
@@ -353,7 +384,7 @@ function AdminProductPage() {
                     </option>
                   ))}
                 </select>
-                {errors.brandId && <p className="mt-1 text-xs text-red-600">{errors.brandId.message}</p>}
+                  {errors.brandId && <p className="mt-1 text-xs text-amber-600">{errors.brandId.message}</p>}
               </div>
 
               <div>
@@ -366,13 +397,44 @@ function AdminProductPage() {
                   min="0"
                   step="0.01"
                   disabled={priceDisabled}
-                  className="w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm outline-none transition focus:border-red-500 disabled:bg-zinc-100"
+                  className="w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm outline-none transition focus:border-amber-500 disabled:bg-zinc-100"
                   {...register('price', {
                     validate: (value) =>
                       isContactPrice || value !== '' || 'Vui lòng nhập giá sản phẩm khi không chọn liên hệ',
                   })}
                 />
-                {errors.price && <p className="mt-1 text-xs text-red-600">{errors.price.message}</p>}
+                {errors.price && <p className="mt-1 text-xs text-amber-600">{errors.price.message}</p>}
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-semibold text-zinc-700" htmlFor="product-vat-rate">
+                  Thuế suất (%)
+                </label>
+                <input
+                  id="product-vat-rate"
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="0.01"
+                  disabled={Boolean(isVatExempt)}
+                  className="w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm outline-none transition focus:border-amber-500 disabled:bg-amber-50"
+                  {...register('vatRate', {
+                    valueAsNumber: true,
+                    validate: (value) =>
+                      isVatExempt || (value !== undefined && value !== null && value >= 0 && value <= 100) ||
+                      'Thuế suất phải từ 0 đến 100',
+                  })}
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="flex items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900">
+                  <input type="checkbox" className="h-4 w-4 accent-amber-700" {...register('isVatExempt')} />
+                  Miễn thuế VAT
+                </label>
+                <p className="mt-2 text-xs text-amber-700">
+                  {isVatExempt ? 'Mặt hàng này sẽ được đặt thuế suất về 0%.' : 'Bỏ chọn để áp dụng thuế suất mặc định 10%.'}
+                </p>
               </div>
 
               <div>
@@ -396,15 +458,22 @@ function AdminProductPage() {
                   id="product-image-file"
                   type="file"
                   accept="image/*"
-                  className="w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm outline-none transition file:mr-4 file:rounded-lg file:border-0 file:bg-zinc-900 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-zinc-700"
+                  className="w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm outline-none transition file:mr-4 file:rounded-lg file:border-0 file:bg-amber-900 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-amber-800"
                   {...register('imageFile')}
                 />
               </div>
 
               <div className="md:col-span-2">
                 <label className="flex items-center gap-3 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm font-semibold text-zinc-700">
-                  <input type="checkbox" className="h-4 w-4 accent-red-600" {...register('isContactPrice')} />
+                  <input type="checkbox" className="h-4 w-4 accent-amber-700" {...register('isContactPrice')} />
                   Giá liên hệ
+                </label>
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="flex items-center gap-3 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm font-semibold text-zinc-700">
+                  <input type="checkbox" className="h-4 w-4 accent-amber-700" {...register('isActive')} />
+                  Đang hoạt động
                 </label>
               </div>
 
@@ -415,7 +484,7 @@ function AdminProductPage() {
                 <textarea
                   id="product-description"
                   rows={3}
-                  className="w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm outline-none transition focus:border-red-500"
+                  className="w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm outline-none transition focus:border-amber-500"
                   placeholder="Mô tả ngắn cho sản phẩm"
                   {...register('description')}
                 />
@@ -439,14 +508,14 @@ function AdminProductPage() {
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="rounded-xl border border-zinc-300 px-4 py-3 text-sm font-bold text-zinc-700 transition hover:bg-zinc-100 sm:w-auto"
+                  className="rounded-xl border border-zinc-300 px-4 py-3 text-sm font-bold text-zinc-700 transition hover:bg-amber-50 sm:w-auto"
                 >
                   Hủy
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="rounded-xl bg-red-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-red-700 disabled:opacity-60 sm:w-auto"
+                  className="rounded-xl bg-amber-700 px-4 py-3 text-sm font-bold text-white transition hover:bg-amber-800 disabled:opacity-60 sm:w-auto"
                 >
                   {isSubmitting ? 'Đang lưu...' : 'Lưu lại'}
                 </button>

@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import Swal from 'sweetalert2'
 import useAuthSession from '../../hooks/useAuthSession'
 import { checkoutCod, checkoutCodGuest } from '../../services/orderApi'
+import { calculateVatTotals, getVatLabel } from '../../utils/product'
 
 const currency = new Intl.NumberFormat('vi-VN', {
   style: 'currency',
@@ -57,10 +58,7 @@ function CheckoutPage({ cartItems = [], onRefreshCart = async () => {}, onClearC
     })
   }, [reset, session])
 
-  const subtotal = useMemo(
-    () => checkoutItems.reduce((total, item) => total + Number(item.price ?? 0) * Number(item.quantity ?? 0), 0),
-    [checkoutItems],
-  )
+  const { subTotal, totalVat, grandTotal } = useMemo(() => calculateVatTotals(checkoutItems), [checkoutItems])
 
   const onSubmit = async (values) => {
     if (checkoutItems.length === 0) {
@@ -248,6 +246,7 @@ function CheckoutPage({ cartItems = [], onRefreshCart = async () => {}, onClearC
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-semibold text-zinc-900">{item.name}</p>
                   <p className="text-sm text-zinc-500">SL: {item.quantity}</p>
+                  <p className="text-xs font-medium text-zinc-500">{getVatLabel(item)}</p>
                 </div>
                 <div className="text-sm font-semibold text-zinc-900 sm:text-right">
                   {currency.format(Number(item.price ?? 0) * Number(item.quantity ?? 0))}
@@ -259,11 +258,15 @@ function CheckoutPage({ cartItems = [], onRefreshCart = async () => {}, onClearC
           <div className="mt-6 rounded-2xl bg-zinc-50 p-4">
             <div className="flex items-center justify-between text-sm text-zinc-500">
               <span>Tạm tính</span>
-              <span>{currency.format(subtotal)}</span>
+              <span>{currency.format(subTotal)}</span>
+            </div>
+            <div className="mt-2 flex items-center justify-between text-sm text-zinc-500">
+              <span>Thuế VAT</span>
+              <span>{currency.format(totalVat)}</span>
             </div>
             <div className="mt-2 flex items-center justify-between text-base font-black text-zinc-900 sm:text-lg">
-              <span>Tổng tiền</span>
-              <span>{currency.format(subtotal)}</span>
+              <span>Tổng thanh toán</span>
+              <span>{currency.format(grandTotal)}</span>
             </div>
           </div>
 

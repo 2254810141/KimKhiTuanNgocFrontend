@@ -56,6 +56,8 @@ function appendProductFormData(formData, payload) {
 
   formData.append('IsContactPrice', String(Boolean(payload.isContactPrice)))
   formData.append('IsActive', String(Boolean(payload.isActive)))
+  formData.append('IsVatExempt', String(Boolean(payload.isVatExempt)))
+  formData.append('VatRate', String(payload.isVatExempt ? 0 : Number(payload.vatRate ?? 10)))
 
   if (!payload.isContactPrice && payload.price !== undefined && payload.price !== null && payload.price !== '') {
     formData.append('Price', String(payload.price))
@@ -79,6 +81,8 @@ function mapProduct(item) {
     brandId: item.brandId ?? item.BrandId ?? null,
     name: item.name ?? item.Name ?? 'Sản phẩm',
     price: item.price ?? item.Price ?? null,
+    vatRate: item.vatRate ?? item.VatRate ?? 10,
+    isVatExempt: item.isVatExempt ?? item.IsVatExempt ?? false,
     isContactPrice: item.isContactPrice ?? item.IsContactPrice ?? false,
     isActive: item.isActive ?? item.IsActive ?? true,
     image: item.image ?? item.Image ?? '',
@@ -261,7 +265,10 @@ function mapOrder(item) {
     customerName: item.customerName ?? item.CustomerName ?? item.fullName ?? item.FullName ?? 'Khách hàng',
     customerEmail: item.customerEmail ?? item.CustomerEmail ?? item.email ?? item.Email ?? '',
     customerPhone: item.customerPhone ?? item.CustomerPhone ?? item.phone ?? item.Phone ?? '',
-    totalAmount: item.totalAmount ?? item.TotalAmount ?? 0,
+    subTotal: item.subTotal ?? item.SubTotal ?? item.totalAmount ?? item.TotalAmount ?? 0,
+    totalVat: item.totalVat ?? item.TotalVat ?? 0,
+    grandTotal: item.grandTotal ?? item.GrandTotal ?? item.totalAmount ?? item.TotalAmount ?? 0,
+    totalAmount: item.totalAmount ?? item.TotalAmount ?? item.grandTotal ?? item.GrandTotal ?? 0,
     status: item.status ?? item.Status ?? 'Pending',
     paymentMethod: item.paymentMethod ?? item.PaymentMethod ?? 'COD',
     paymentStatus: item.paymentStatus ?? item.PaymentStatus ?? 'Pending',

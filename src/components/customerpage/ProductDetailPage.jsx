@@ -164,8 +164,11 @@ function ProductDetailPage({ onAddToCart = () => {} }) {
           <h1 className="text-xl font-black leading-tight text-zinc-900 sm:text-2xl">{product.name}</h1>
 
           <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
-            <p className="text-sm text-zinc-500">Đã bao gồm phí VAT</p>
+            <p className="text-sm text-zinc-500">Thông tin giá và VAT</p>
             <div className="mt-1 text-2xl font-black text-red-700 sm:text-3xl">{product.displayPrice}</div>
+            <p className={`mt-2 text-sm font-medium ${product.isVatExempt ? 'text-amber-700' : 'text-zinc-500'}`}>
+              {product.vatLabel}
+            </p>
             {product.isContactPrice && <p className="mt-2 text-sm text-zinc-500">Sản phẩm này báo giá theo liên hệ.</p>}
           </div>
 
@@ -216,7 +219,7 @@ function ProductDetailPage({ onAddToCart = () => {} }) {
       <div className="mt-6 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-5">
         <div className="mb-4 flex items-center justify-between gap-3">
           <div>
-            <h2 className="text-lg font-black text-zinc-900 sm:text-xl">Sản phẩm liên quan :</h2>
+            <h2 className="text-lg font-black text-zinc-900 sm:text-xl">Sản phẩm liên quan</h2>
             <p className="text-sm text-zinc-500">Cuộn ngang để xem thêm các sản phẩm có cùng danh mục.</p>
           </div>
         </div>
@@ -243,6 +246,7 @@ function ProductDetailPage({ onAddToCart = () => {} }) {
                     {relatedProduct.name}
                   </h3>
                   <p className="text-base font-bold text-red-700">{relatedProduct.displayPrice}</p>
+                  <p className="text-xs font-medium text-zinc-500">{relatedProduct.vatLabel}</p>
                   <div className="flex gap-2">
                     <Link
                       to={`/products/${relatedProduct.id}`}

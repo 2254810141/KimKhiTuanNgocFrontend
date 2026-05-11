@@ -24,6 +24,8 @@ function readLocalCart() {
           image: item.image || PLACEHOLDER_IMAGE,
           quantity: Number(item.quantity ?? 1),
           isContactPrice: Boolean(item.isContactPrice),
+              vatRate: Number(item.vatRate ?? 10),
+              isVatExempt: Boolean(item.isVatExempt),
         }))
       : []
   } catch {
@@ -44,6 +46,8 @@ function normalizeRemoteCartItem(item) {
     image: toAbsoluteImageUrl(item.productImage ?? item.ProductImage ?? ''),
     quantity: Number(item.quantity ?? item.Quantity ?? 1),
     isContactPrice: false,
+    vatRate: Number(item.vatRate ?? item.VatRate ?? 10),
+    isVatExempt: Boolean(item.isVatExempt ?? item.IsVatExempt ?? false),
   }
 }
 
@@ -56,6 +60,8 @@ function normalizeLocalCartItem(product, quantity = 1) {
     image: product.image || PLACEHOLDER_IMAGE,
     quantity,
     isContactPrice: Boolean(product.isContactPrice),
+    vatRate: Number(product.vatRate ?? 10),
+    isVatExempt: Boolean(product.isVatExempt),
   }
 }
 

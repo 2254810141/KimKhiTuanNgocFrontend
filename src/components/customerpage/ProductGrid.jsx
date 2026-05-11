@@ -19,6 +19,9 @@ function ProductGrid({ products, onAddToCart = () => {} }) {
           <div className="flex flex-1 flex-col gap-2 p-3 sm:gap-3 sm:p-4">
             <h3 className="min-h-10 text-sm font-semibold leading-snug text-zinc-900 sm:min-h-12">{product.name}</h3>
             <p className="text-lg font-bold text-red-700 sm:text-xl">{product.displayPrice}</p>
+            <p className={`text-xs font-medium ${product.isVatExempt ? 'text-amber-700' : 'text-zinc-500'}`}>
+              {product.vatLabel}
+            </p>
             <p className="text-xs text-zinc-500">Mã SP: {product.id}</p>
 
             <div className="mt-auto flex flex-col gap-2 sm:flex-row sm:items-center">

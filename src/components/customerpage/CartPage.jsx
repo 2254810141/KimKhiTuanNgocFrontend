@@ -1,6 +1,7 @@
 ﻿import Swal from 'sweetalert2'
 import { useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { calculateVatTotals, getVatLabel } from '../../utils/product'
 
 const currency = new Intl.NumberFormat('vi-VN', {
   style: 'currency',
@@ -18,7 +19,7 @@ function CartPage({ cartItems = [], onRemoveItem = () => {}, onUpdateQuantity = 
     [cartItems, selectedProductIds],
   )
 
-  const subtotal = selectedItems.reduce((total, item) => total + item.price * item.quantity, 0)
+  const { subTotal, totalVat, grandTotal } = useMemo(() => calculateVatTotals(selectedItems), [selectedItems])
   const isAllSelected = cartItems.length > 0 && selectedItems.length === cartItems.length
 
   const toggleItem = (itemId) => {
@@ -120,6 +121,9 @@ function CartPage({ cartItems = [], onRemoveItem = () => {}, onUpdateQuantity = 
                     <div>
                       <h3 className="font-semibold text-zinc-900">{item.name}</h3>
                       <p className="text-sm text-zinc-500">{currency.format(item.price)}</p>
+                        <p className={`text-xs font-medium ${item.isVatExempt ? 'text-amber-700' : 'text-zinc-500'}`}>
+                          {getVatLabel(item)}
+                        </p>
                     </div>
                   </label>
 
@@ -156,8 +160,20 @@ function CartPage({ cartItems = [], onRemoveItem = () => {}, onUpdateQuantity = 
             </div>
 
             <aside className="h-fit rounded-xl border border-zinc-200 bg-white p-5 shadow-sm">
-              <p className="text-sm text-zinc-500">Tạm tính cho sản phẩm đã chọn</p>
-              <h3 className="mt-2 text-2xl font-black text-zinc-900">{currency.format(subtotal)}</h3>
+              <div className="space-y-2 rounded-2xl bg-amber-50 p-4 text-sm text-zinc-700">
+                <div className="flex items-center justify-between">
+                  <span>Tạm tính</span>
+                  <span>{currency.format(subTotal)}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>Thuế VAT</span>
+                  <span>{currency.format(totalVat)}</span>
+                </div>
+                <div className="flex items-center justify-between border-t border-amber-200 pt-2 text-base font-black text-zinc-900">
+                  <span>Tổng thanh toán</span>
+                  <span>{currency.format(grandTotal)}</span>
+                </div>
+              </div>
               <button
                 type="button"
                 disabled={selectedItems.length === 0}
