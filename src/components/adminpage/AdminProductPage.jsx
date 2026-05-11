@@ -22,28 +22,34 @@ function AdminProductPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const prevVatExemptRef = useRef(false)
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    watch,
-    setValue,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      name: '',
-      price: '',
-      vatRate: 10,
-      isVatExempt: false,
-      categoryId: '',
-      brandId: '',
-      isContactPrice: false,
-      isActive: true,
-      imageUrl: '',
-      description: '',
-      imageFile: null,
-    },
-  })
+   const {
+     register,
+     handleSubmit,
+     reset,
+     watch,
+     setValue,
+     formState: { errors },
+   } = useForm({
+     defaultValues: {
+       name: '',
+       price: '',
+       vatRate: 10,
+       isVatExempt: false,
+       categoryId: '',
+       brandId: '',
+       isContactPrice: false,
+       isActive: true,
+       imageUrl: '',
+       description: '',
+       imageFile: null,
+     },
+   })
+
+   // ✅ Validator để check whitespace-only strings
+   const validateNotEmpty = (value) => {
+     if (typeof value !== 'string') return true
+     return value.trim() !== '' || 'Vui lòng nhập giá trị (không phải khoảng trắng)'
+   }
 
   const isContactPrice = watch('isContactPrice')
   const isVatExempt = watch('isVatExempt')
@@ -344,67 +350,81 @@ function AdminProductPage() {
                    id="product-name"
                    type="text"
                    className="w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm outline-none transition focus:border-amber-500"
-                   {...register('name', { required: 'Vui lòng nhập tên sản phẩm' })}
+                   {...register('name', { 
+                     required: 'Vui lòng nhập tên sản phẩm',
+                     validate: validateNotEmpty
+                   })}
                  />
                  {errors.name && <p className="mt-1 text-xs text-amber-600">{errors.name.message}</p>}
               </div>
 
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-zinc-700" htmlFor="product-category">
-                  Danh mục
-                </label>
-                 <select
-                   id="product-category"
-                   className="w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm outline-none transition focus:border-amber-500"
-                   {...register('categoryId', { required: 'Vui lòng chọn danh mục' })}
-                 >
-                   <option value="">-- Chọn danh mục --</option>
-                   {categories.map((category) => (
-                     <option key={category.id} value={category.id}>
-                       {category.name}
-                     </option>
-                   ))}
-                 </select>
-                 {errors.categoryId && <p className="mt-1 text-xs text-amber-600">{errors.categoryId.message}</p>}
-              </div>
-
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-zinc-700" htmlFor="product-brand">
-                  Thương hiệu
-                </label>
+               <div>
+                 <label className="mb-2 block text-sm font-semibold text-zinc-700" htmlFor="product-category">
+                   Danh mục
+                 </label>
                   <select
-                    id="product-brand"
+                    id="product-category"
                     className="w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm outline-none transition focus:border-amber-500"
-                  {...register('brandId', { required: 'Vui lòng chọn thương hiệu' })}
-                >
-                  <option value="">-- Chọn thương hiệu --</option>
-                  {brands.map((brand) => (
-                    <option key={brand.id} value={brand.id}>
-                      {brand.name}
-                    </option>
-                  ))}
-                </select>
-                  {errors.brandId && <p className="mt-1 text-xs text-amber-600">{errors.brandId.message}</p>}
-              </div>
+                    {...register('categoryId', { 
+                      required: 'Vui lòng chọn danh mục',
+                      validate: (value) => value !== '' && value !== '0' || 'Vui lòng chọn danh mục hợp lệ'
+                    })}
+                  >
+                    <option value="">-- Chọn danh mục --</option>
+                    {categories.map((category) => (
+                      <option key={category.id} value={category.id}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.categoryId && <p className="mt-1 text-xs text-amber-600">{errors.categoryId.message}</p>}
+               </div>
+
+               <div>
+                 <label className="mb-2 block text-sm font-semibold text-zinc-700" htmlFor="product-brand">
+                   Thương hiệu
+                 </label>
+                   <select
+                     id="product-brand"
+                     className="w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm outline-none transition focus:border-amber-500"
+                     {...register('brandId', { 
+                       required: 'Vui lòng chọn thương hiệu',
+                       validate: (value) => value !== '' && value !== '0' || 'Vui lòng chọn thương hiệu hợp lệ'
+                     })}
+                   >
+                     <option value="">-- Chọn thương hiệu --</option>
+                     {brands.map((brand) => (
+                       <option key={brand.id} value={brand.id}>
+                         {brand.name}
+                       </option>
+                     ))}
+                   </select>
+                   {errors.brandId && <p className="mt-1 text-xs text-amber-600">{errors.brandId.message}</p>}
+               </div>
 
               <div>
                 <label className="mb-2 block text-sm font-semibold text-zinc-700" htmlFor="product-price">
                   Giá
                 </label>
-                <input
-                  id="product-price"
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  disabled={priceDisabled}
-                  className="w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm outline-none transition focus:border-amber-500 disabled:bg-zinc-100"
-                  {...register('price', {
-                    validate: (value) =>
-                      isContactPrice || value !== '' || 'Vui lòng nhập giá sản phẩm khi không chọn liên hệ',
-                  })}
-                />
-                {errors.price && <p className="mt-1 text-xs text-amber-600">{errors.price.message}</p>}
-              </div>
+                 <input
+                   id="product-price"
+                   type="number"
+                   min="0"
+                   step="0.01"
+                   disabled={priceDisabled}
+                   className="w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm outline-none transition focus:border-amber-500 disabled:bg-zinc-100"
+                   {...register('price', {
+                     validate: (value) => {
+                       if (isContactPrice) return true  // Skip validation nếu liên hệ
+                       if (value === '') return 'Vui lòng nhập giá sản phẩm'
+                       const numValue = Number(value)
+                       if (isNaN(numValue) || numValue <= 0) return 'Giá phải lớn hơn 0'
+                       return true
+                     }
+                   })}
+                 />
+                 {errors.price && <p className="mt-1 text-xs text-amber-600">{errors.price.message}</p>}
+               </div>
 
               <div>
                 <label className="mb-2 block text-sm font-semibold text-zinc-700" htmlFor="product-vat-rate">

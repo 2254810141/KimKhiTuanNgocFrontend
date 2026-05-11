@@ -72,8 +72,12 @@ export function useSignalR(hubUrl) {
 
   useEffect(() => {
     const startConnection = async () => {
-      if (token) {
+      // ✅ Đảm bảo token tồn tại và không empty
+      if (token && token.trim()) {
         await connect()
+      } else {
+        // ⚠️ Nếu token không sẵn sàng, đợi session được load
+        console.log('SignalR: Waiting for token to be available...')
       }
     }
 

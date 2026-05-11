@@ -44,14 +44,31 @@ async function request(config, fallbackMessage) {
 }
 
 function appendProductFormData(formData, payload) {
-  formData.append('Name', payload.name ?? '')
-
-  if (payload.categoryId !== undefined && payload.categoryId !== null && payload.categoryId !== '') {
-    formData.append('CategoryId', String(payload.categoryId))
+  // ✅ Validation: Name không được rỗng
+  if (!payload.name || !payload.name.trim()) {
+    throw new Error('Tên sản phẩm không thể để trống')
   }
+  
+  formData.append('Name', payload.name.trim())
 
-  if (payload.brandId !== undefined && payload.brandId !== null && payload.brandId !== '') {
-    formData.append('BrandId', String(payload.brandId))
+  // ✅ Validation: CategoryId phải được chọn
+  if (!payload.categoryId || payload.categoryId === '0') {
+    throw new Error('Vui lòng chọn danh mục')
+  }
+  formData.append('CategoryId', String(payload.categoryId))
+
+  // ✅ Validation: BrandId phải được chọn
+  if (!payload.brandId || payload.brandId === '0') {
+    throw new Error('Vui lòng chọn thương hiệu')
+  }
+  formData.append('BrandId', String(payload.brandId))
+
+  // ✅ Validation: Price validation khi không phải contact price
+  if (!payload.isContactPrice) {
+    if (!payload.price || Number(payload.price) <= 0) {
+      throw new Error('Giá sản phẩm phải lớn hơn 0')
+    }
+    formData.append('Price', String(payload.price))
   }
 
   formData.append('IsContactPrice', payload.isContactPrice ? 'true' : 'false')
@@ -59,9 +76,6 @@ function appendProductFormData(formData, payload) {
   formData.append('IsVatExempt', payload.isVatExempt ? 'true' : 'false')
   formData.append('VatRate', String(payload.isVatExempt ? 0 : Number(payload.vatRate ?? 10)))
 
-  if (!payload.isContactPrice && payload.price !== undefined && payload.price !== null && payload.price !== '') {
-    formData.append('Price', String(payload.price))
-  }
 
   if (payload.imageFile instanceof File) {
     formData.append('ImageFile', payload.imageFile)
