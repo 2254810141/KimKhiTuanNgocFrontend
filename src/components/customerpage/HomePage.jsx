@@ -6,10 +6,13 @@ import { getCategories } from '../../services/categoryApi'
 import BannerPopup from './BannerPopup'
 import ZaloButton from './ZaloButton'
 
+const PAGE_SIZE = 8
+
 function HomePage({ onAddToCart = () => {} }) {
   const [featured, setFeatured] = useState([])
   const [categories, setCategories] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
     let mounted = true
@@ -18,7 +21,7 @@ function HomePage({ onAddToCart = () => {} }) {
       try {
         const [productData, categoryData] = await Promise.all([getProducts(), getCategories()])
         if (mounted) {
-          setFeatured(productData.filter((item) => item.isActive).slice(0, 8))
+          setFeatured(productData.filter((item) => item.isActive))
           setCategories(categoryData.filter((item) => item.isActive).slice(0, 6))
         }
       } catch {
@@ -37,6 +40,15 @@ function HomePage({ onAddToCart = () => {} }) {
       mounted = false
     }
   }, [])
+
+  const totalPages = Math.max(1, Math.ceil(featured.length / PAGE_SIZE))
+  const safeCurrentPage = Math.min(currentPage, totalPages)
+  const startIndex = (safeCurrentPage - 1) * PAGE_SIZE
+  const paginatedFeatured = featured.slice(startIndex, startIndex + PAGE_SIZE)
+
+  const goToPage = (page) => {
+    setCurrentPage(Math.min(totalPages, Math.max(1, page)))
+  }
 
   return (
     <>
@@ -123,7 +135,48 @@ function HomePage({ onAddToCart = () => {} }) {
               Đang tải sản phẩm...
             </div>
           ) : (
-            <ProductGrid products={featured} onAddToCart={onAddToCart} />
+            <div className="space-y-4">
+              <ProductGrid products={paginatedFeatured} onAddToCart={onAddToCart} />
+
+              {featured.length > 0 && totalPages > 1 && (
+                <div className="flex flex-wrap items-center justify-center gap-2" role="navigation" aria-label="Phân trang sản phẩm nổi bật">
+                  <button
+                    type="button"
+                    className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-100 disabled:opacity-50"
+                    onClick={() => goToPage(safeCurrentPage - 1)}
+                    disabled={safeCurrentPage === 1}
+                  >
+                    Trước
+                  </button>
+
+                  <div className="flex max-w-full flex-wrap items-center justify-center gap-2">
+                    {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+                      <button
+                        key={page}
+                        type="button"
+                        className={`h-9 min-w-9 rounded-md border px-3 text-sm font-semibold transition ${
+                          page === safeCurrentPage
+                            ? 'border-amber-700 bg-amber-700 text-white'
+                            : 'border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-100'
+                        }`}
+                        onClick={() => goToPage(page)}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    type="button"
+                    className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-100 disabled:opacity-50"
+                    onClick={() => goToPage(safeCurrentPage + 1)}
+                    disabled={safeCurrentPage === totalPages}
+                  >
+                    Sau
+                  </button>
+                </div>
+              )}
+            </div>
           )}
         </section>
 
