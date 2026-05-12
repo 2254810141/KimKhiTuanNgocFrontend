@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { API_BASE_URL } from './apiBaseUrl'
-import { getAuthSession, clearAuthSession } from './authSession'
+import { getAuthSession, clearAuthSession, saveAuthSession, isAccessTokenExpired } from './authSession'
 
 // Tạo Axios instance với config
 const api = axios.create({
@@ -15,28 +15,98 @@ const api = axios.create({
 let isRefreshing = false
 let failedQueue = []
 
-const processQueue = (error) => {
+const refreshApi = axios.create({
+  baseURL: API_BASE_URL,
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
+const AUTH_ENDPOINTS = ['/api/User/login', '/api/User/admin/login', '/api/User/register', '/api/User/admin/register', '/api/User/refresh']
+
+const isAuthEndpoint = (url = '') => AUTH_ENDPOINTS.some((endpoint) => url.includes(endpoint))
+
+const redirectToLogin = () => {
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  const isAdminRoute = window.location.pathname.startsWith('/admin')
+  window.location.href = isAdminRoute ? '/admin/login' : '/login'
+}
+
+const refreshAccessToken = async () => {
+  const currentSession = getAuthSession()
+  if (!currentSession?.refreshToken) {
+    throw new Error('Missing refresh token')
+  }
+
+  const response = await refreshApi.post('/api/User/refresh', {
+    refreshToken: currentSession.refreshToken,
+  })
+
+  const data = response?.data
+  if (!data?.accessToken || !data?.refreshToken) {
+    throw new Error('Invalid refresh token response')
+  }
+
+  const nextSession = {
+    ...currentSession,
+    accessToken: data.accessToken,
+    refreshToken: data.refreshToken,
+    expiresAt: data.expiresAt,
+    user: data.user ?? currentSession.user,
+  }
+
+  saveAuthSession(nextSession)
+  return data.accessToken
+}
+
+const processQueue = (error, token = null) => {
   failedQueue.forEach(prom => {
     if (error) {
       prom.reject(error)
     } else {
-      prom.resolve()
+      prom.resolve(token)
     }
   })
-  
-  isRefreshing = false
+
   failedQueue = []
 }
 
 // Interceptor: Thêm Authorization token từ session
 api.interceptors.request.use(
-  (config) => {
+  async (config) => {
+    config.headers = config.headers ?? {}
     const session = getAuthSession()
-    // ✅ Luôn luôn gửi token, ngay cả khi nó tồn tại
-    if (session?.accessToken && session.accessToken.trim()) {
+    const hasToken = Boolean(session?.accessToken && session.accessToken.trim())
+    const shouldRefresh = hasToken && isAccessTokenExpired(session) && session?.refreshToken && !isAuthEndpoint(config.url)
+
+    if (shouldRefresh) {
+      if (isRefreshing) {
+        const token = await new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject })
+        })
+        config.headers.Authorization = `Bearer ${token}`
+      } else {
+        isRefreshing = true
+        try {
+          const newAccessToken = await refreshAccessToken()
+          processQueue(null, newAccessToken)
+          config.headers.Authorization = `Bearer ${newAccessToken}`
+        } catch (refreshError) {
+          processQueue(refreshError, null)
+          clearAuthSession()
+          redirectToLogin()
+          throw refreshError
+        } finally {
+          isRefreshing = false
+        }
+      }
+    } else if (hasToken) {
       config.headers.Authorization = `Bearer ${session.accessToken}`
     } else {
-      // ⚠️ Nếu không có token, xóa Authorization header để tránh gửi "Bearer undefined"
       delete config.headers.Authorization
     }
     
@@ -53,47 +123,54 @@ api.interceptors.request.use(
 // Interceptor: Xử lý errors chung
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     const originalRequest = error.config
+    const status = error.response?.status
 
-    if (error.response?.status === 401) {
-      // ✅ Log chi tiết để debug
-      const session = getAuthSession()
-      console.error('401 Unauthorized')
-      console.error('Session:', session ? 'Exists' : 'None')
-      console.error('Token:', session?.accessToken ? 'Present' : 'Missing')
-      console.error('Requested URL:', error.config?.url)
-      
-      // ⚠️ Nếu đang refresh token, queue lại request
-      if (isRefreshing) {
-        return new Promise((resolve, reject) => {
-          failedQueue.push({ resolve, reject })
-        }).then(() => api(originalRequest))
-      }
-
-      // ✅ Nếu có refreshToken, thử refresh
-      if (session?.refreshToken && !originalRequest._retry) {
-        isRefreshing = true
-        originalRequest._retry = true
-
-        // Ở đây bạn có thể gọi API refresh token nếu backend hỗ trợ
-        // const refreshPromise = api.post('/api/User/refresh-token', { refreshToken: session.refreshToken })
-        // refreshPromise.then(response => { ... }).catch(error => { ... })
-        
-        // Hiện tại, vì không có endpoint refresh, chúng ta clear session
-        console.warn('Token refresh not implemented, clearing session')
-        clearAuthSession()
-        processQueue(error)
-        
-        // Redirect to login
-        window.location.href = '/login'
-      } else {
-        // Không có refreshToken, clear session
-        clearAuthSession()
-      }
+    if (status !== 401 || !originalRequest) {
+      return Promise.reject(error)
     }
-    
-    return Promise.reject(error)
+
+    if (isAuthEndpoint(originalRequest.url) || originalRequest._retry) {
+      return Promise.reject(error)
+    }
+
+    const session = getAuthSession()
+    if (!session?.refreshToken) {
+      clearAuthSession()
+      redirectToLogin()
+      return Promise.reject(error)
+    }
+
+    originalRequest._retry = true
+
+    if (isRefreshing) {
+      return new Promise((resolve, reject) => {
+        failedQueue.push({ resolve, reject })
+      })
+        .then((token) => {
+          originalRequest.headers = originalRequest.headers ?? {}
+          originalRequest.headers.Authorization = `Bearer ${token}`
+          return api(originalRequest)
+        })
+        .catch((queueError) => Promise.reject(queueError))
+    }
+
+    isRefreshing = true
+    try {
+      const newAccessToken = await refreshAccessToken()
+      originalRequest.headers = originalRequest.headers ?? {}
+      originalRequest.headers.Authorization = `Bearer ${newAccessToken}`
+      processQueue(null, newAccessToken)
+      return api(originalRequest)
+    } catch (refreshError) {
+      processQueue(refreshError, null)
+      clearAuthSession()
+      redirectToLogin()
+      return Promise.reject(refreshError)
+    } finally {
+      isRefreshing = false
+    }
   }
 )
 
