@@ -1,11 +1,19 @@
-<!doctype html>
-<html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/avata.png" />
+    <!-- 1. Sửa dòng này: Đổi type thành image/png vì bạn đang dùng file .png và thêm / trước tên file -->
+    <link rel="icon" type="image/png" href="/avata.png" />
+    
+    <!-- 2. Thêm dòng này để kết nối với file manifest.json bạn vừa tạo -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- 3. Thêm dòng này để hỗ trợ hiển thị tốt trên thiết bị Apple (iOS) -->
+    <link rel="apple-touch-icon" href="/avata.png" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Kim Khí Tuấn Ngọc - Chuyên gia công cơ khí chính xác, sản xuất thiết bị inox, sắt thép theo yêu cầu tại TP.HCM. Uy tín, chất lượng, giá cạnh tranh.">
     <meta name="keywords" content="gia công cơ khí, kim khí tuấn ngọc, thiết bị inox, cơ khí chính xác hcm">
     <title>Kim Khí Tuấn Ngọc</title>
+    
     <style>
       :root {
         --accent: #d97706;
@@ -21,9 +29,4 @@
         --shadow: 0 10px 35px rgba(120, 53, 15, 0.18);
       }
     </style>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
-</html>
+</head>
