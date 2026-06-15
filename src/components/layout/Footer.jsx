@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 function Footer() {
   return (
     <footer className="border-t border-amber-700 bg-amber-900 text-amber-100">
-      <div className="container-app grid gap-7 py-8 sm:py-10 md:grid-cols-3">
+      <div className="container-app grid gap-7 py-8 sm:py-10 md:grid-cols-4">
         <div>
           <p className="text-base font-extrabold text-amber-400 sm:text-lg">Kim Khí Tuấn Ngọc</p>
           <p className="mt-2 text-sm text-amber-200">
@@ -21,6 +21,28 @@ function Footer() {
           </Link>
           <Link to="/contact" className="block hover:text-amber-300">
             Liên hệ tư vấn
+          </Link>
+        </div>
+
+        <div className="space-y-2 text-sm">
+          <p className="font-bold uppercase tracking-wide text-amber-50">Chính sách bán hàng</p>
+          <Link to="/huong-dan-mua-hang" className="block hover:text-amber-300">
+            Hướng dẫn mua hàng
+          </Link>
+          <Link to="/huong-dan-thanh-toan" className="block hover:text-amber-300">
+            Hướng dẫn thanh toán
+          </Link>
+          <Link to="/van-chuyen-va-giao-nhan" className="block hover:text-amber-300">
+            Vận chuyển và giao nhận
+          </Link>
+          <Link to="/kiem-tra-va-doi-tra-hang" className="block hover:text-amber-300">
+            Kiểm tra và đổi trả hàng
+          </Link>
+          <Link to="/huong-dan-bao-hanh" className="block hover:text-amber-300">
+            Hướng dẫn bảo hành
+          </Link>
+          <Link to="/chinh-sach-bao-mat" className="block hover:text-amber-300">
+            Chính sách bảo mật dữ liệu cá nhân
           </Link>
         </div>
 

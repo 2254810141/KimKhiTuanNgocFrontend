@@ -21,6 +21,12 @@ import CheckoutPage from './components/customerpage/CheckoutPage'
 import ContactPage from './components/customerpage/ContactPage'
 import OrderHistoryPage from './components/customerpage/OrderHistoryPage'
 import OrderLookupPage from './components/customerpage/OrderLookupPage'
+import BuyingGuide from './components/customerpage/policies/BuyingGuide'
+import PaymentGuide from './components/customerpage/policies/PaymentGuide'
+import ShippingPolicy from './components/customerpage/policies/ShippingPolicy'
+import ReturnPolicy from './components/customerpage/policies/ReturnPolicy'
+import WarrantyPolicy from './components/customerpage/policies/WarrantyPolicy'
+import PrivacyPolicy from './components/customerpage/policies/PrivacyPolicy'
 import useCart from './hooks/useCart'
 import useAuthSession from './hooks/useAuthSession'
 
@@ -78,6 +84,12 @@ function App() {
             }
           />
           <Route path="contact" element={<ContactPage />} />
+          <Route path="huong-dan-mua-hang" element={<BuyingGuide />} />
+          <Route path="huong-dan-thanh-toan" element={<PaymentGuide />} />
+          <Route path="van-chuyen-va-giao-nhan" element={<ShippingPolicy />} />
+          <Route path="kiem-tra-va-doi-tra-hang" element={<ReturnPolicy />} />
+          <Route path="huong-dan-bao-hanh" element={<WarrantyPolicy />} />
+          <Route path="chinh-sach-bao-mat" element={<PrivacyPolicy />} />
           <Route
             path="cart"
             element={
